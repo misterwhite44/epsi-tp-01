@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book.model';
 import { Router } from '@angular/router';
+import { TruncatePipe } from "../../pipes/truncate.pipe";
+import { FormatPipe } from "../../pipes/format.pipe";
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, TruncatePipe, FormatPipe],
   templateUrl: './book-list.component.html',
 })
 export class BookListComponent implements OnInit {
