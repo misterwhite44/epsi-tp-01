@@ -14,7 +14,7 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class AddBookComponent implements OnInit {
   bookForm!: FormGroup;
-  
+
   constructor(
     private fb: FormBuilder,
     private bookService: BookService,
@@ -41,16 +41,16 @@ export class AddBookComponent implements OnInit {
         next: () => {
           this.notificationService.setLoading(false); 
           this.router.navigate(['/books']); 
-          this.notificationService.showMessage('Livre ajouté avec succès!');
+          this.notificationService.showMessage('Livre ajouté avec succès!'); 
         },
         error: (err: any) => {
           this.notificationService.setLoading(false); 
-          console.error('Erreur lors de l\'ajout du livre', err);
-          this.notificationService.showError('Erreur lors de l\'ajout du livre');
+          console.error('Erreur lors de l\'ajout du livre', err); 
+          this.notificationService.showError('Erreur lors de l\'ajout du livre'); // Notification d'erreur
         }
       });
     } else {
-      this.notificationService.showError('Veuillez remplir tous les champs du formulaire correctement.');
+      this.notificationService.showError('Veuillez remplir tous les champs du formulaire correctement.'); // Formulaire invalide
     }
   }
 
