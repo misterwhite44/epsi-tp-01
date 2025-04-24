@@ -9,6 +9,7 @@ import { BookService } from '../../services/book.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: 'add-book.component.html',
+  styleUrls: ['add-book.component.css']
 })
 export class AddBookComponent implements OnInit {
   bookForm!: FormGroup;
@@ -18,12 +19,16 @@ export class AddBookComponent implements OnInit {
     private bookService: BookService,
     private router: Router
   ) {}
-  
+
   ngOnInit(): void {
-    // TODO 6 : Créer un formulaire avec les champs suivants : title, author, description, category
-    // TODO 7 : Ajouter les validations nécessaires
+    this.bookForm = this.fb.group({
+      title: ['', Validators.required],
+      author: ['', Validators.required],
+      description: ['', Validators.required],
+      category: ['', Validators.required]
+    });
   }
-  
+
   onSubmit(): void {
     if (this.bookForm.valid) {
       this.bookService.addBook(this.bookForm.value).subscribe({
