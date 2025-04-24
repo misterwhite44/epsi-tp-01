@@ -12,8 +12,10 @@ export class HighlightDirective implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.appHighlight) {
       this.renderer.setStyle(this.el.nativeElement, 'font-weight', 'bold');
+      this.renderer.setStyle(this.el.nativeElement, 'background-color', 'yellow'); // Ajout d'une couleur de fond
     } else {
       this.renderer.removeStyle(this.el.nativeElement, 'font-weight');
+      this.renderer.removeStyle(this.el.nativeElement, 'background-color');
     }
   }
 }

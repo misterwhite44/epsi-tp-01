@@ -7,27 +7,27 @@ import { Book } from '../../models/book.model';
 import { Router } from '@angular/router';
 import { TruncatePipe } from "../../pipes/truncate.pipe";
 import { FormatPipe } from "../../pipes/format.pipe";
+import { HighlightDirective } from "../../directives/highlight.directive"; // Assurez-vous d'importer la directive ici
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, TruncatePipe, FormatPipe],
+  imports: [CommonModule, RouterLink, FormsModule, TruncatePipe, FormatPipe, HighlightDirective], // Ajoutez la directive dans les imports
   templateUrl: './book-list.component.html',
 })
 export class BookListComponent implements OnInit {
   books: Book[] = [];
-  data: any[] = [];
   searchTerm: string = '';
 
   constructor(
     private bookService: BookService,
     private router: Router
   ) {}
-  
+
   ngOnInit(): void {
     this.loadBooks();
   }
-  
+
   loadBooks(): void {
     this.bookService.getBooks().subscribe({
       next: (books: Book[]) => {
@@ -39,10 +39,11 @@ export class BookListComponent implements OnInit {
       }
     });
   }
-  
+
   toggleFavorite(book: Book): void {
     this.bookService.toggleFavorite(book.id).subscribe({
       next: (updatedBook: Book) => {
+        this.books = this.books.map(b => b.id === updatedBook.id ? updatedBook : b);
         alert('Favori modifié avec succès');
       },
       error: (err: any) => {
@@ -51,11 +52,11 @@ export class BookListComponent implements OnInit {
       }
     });
   }
-  
+
   deleteBook(id: string): void {
     this.bookService.deleteBook(id).subscribe({
       next: () => {
-        this.books = this.books.filter(book => book.id !== id); // Retirer le livre supprimé de la liste
+        this.books = this.books.filter(book => book.id !== id);
         alert('Livre supprimé avec succès');
       },
       error: (err: any) => {
@@ -63,7 +64,7 @@ export class BookListComponent implements OnInit {
         console.error('Erreur lors de la suppression du livre:', err);
       }
     });
-  } 
+  }
 
   goToBookDetails(id: string): void {
     this.router.navigate(['/books', id]);
