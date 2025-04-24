@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
+import { NotificationService } from '../../services/notification.service';  
 
 @Component({
   selector: 'app-add-book',
@@ -17,31 +18,39 @@ export class AddBookComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private bookService: BookService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService  
   ) {}
 
   ngOnInit(): void {
-    // Initialisation du formulaire avec des validations
     this.bookForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]], // Minimum 3 caractères pour le titre
-      author: ['', [Validators.required, Validators.minLength(3)]], // Minimum 3 caractères pour l'auteur
-      description: ['', [Validators.required, Validators.maxLength(500)]], // Description maximale de 500 caractères
+      title: ['', [Validators.required, Validators.minLength(3)]], 
+      author: ['', [Validators.required, Validators.minLength(3)]], 
+      description: ['', [Validators.required, Validators.maxLength(500)]], 
       category: ['', [Validators.required]],
-      rating: [null, [Validators.min(1), Validators.max(5)]], // Note entre 1 et 5
+      rating: [null, [Validators.min(1), Validators.max(5)]], 
       isFavorite: [false]
     });
   }
 
   onSubmit(): void {
     if (this.bookForm.valid) {
+      this.notificationService.setLoading(true); 
+
       this.bookService.addBook(this.bookForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/books']); // Redirige vers la liste des livres après ajout
+          this.notificationService.setLoading(false); 
+          this.router.navigate(['/books']); 
+          this.notificationService.showMessage('Livre ajouté avec succès!');
         },
         error: (err: any) => {
-          console.error('Erreur lors de l\'ajout du livre', err); // Affiche une erreur si l'ajout échoue
+          this.notificationService.setLoading(false); 
+          console.error('Erreur lors de l\'ajout du livre', err);
+          this.notificationService.showError('Erreur lors de l\'ajout du livre');
         }
       });
+    } else {
+      this.notificationService.showError('Veuillez remplir tous les champs du formulaire correctement.');
     }
   }
 
