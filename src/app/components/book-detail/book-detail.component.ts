@@ -12,7 +12,8 @@ import { Book } from '../../models/book.model';
 })
 export class BookDetailComponent implements OnInit {
   book!: Book;
-  
+  rating: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -25,6 +26,7 @@ export class BookDetailComponent implements OnInit {
       this.bookService.getBookById(id).subscribe({
         next: (book: Book) => {
           this.book = book;
+          this.rating = book.rating || 0;  // Initialiser la note à celle du livre
         },
         error: (err: any) => {
           console.error(err);
@@ -35,17 +37,21 @@ export class BookDetailComponent implements OnInit {
   }
 
   updateRating(rating: number): void {
-    this.bookService.updateBook(this.book.id, { rating: rating }).subscribe({
-      next: (updatedBook: Book) => {
-        console.log('Nouvelle note:', updatedBook);
-      },
-      error: (err: any) => {
-        console.error('Erreur lors de la mise à jour de la note:', err);
-      }
-    });
+    if (rating >= 1 && rating <= 5) {
+      this.bookService.updateBook(this.book.id, { rating: rating }).subscribe({
+        next: (updatedBook: Book) => {
+          console.log('Nouvelle note:', updatedBook);
+        },
+        error: (err: any) => {
+          console.error('Erreur lors de la mise à jour de la note:', err);
+        }
+      });
+    } else {
+      console.error('La note doit être comprise entre 1 et 5');
+    }
   }
 
   goBack(): void {
-    // TODO 8 : Créer un bouton qui permet de revenir à la page précédente
+    this.router.navigate(['/books']); 
   }
 }
