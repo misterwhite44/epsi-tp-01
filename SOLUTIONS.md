@@ -1,4 +1,4 @@
-Voici le fichier `SOLUTIONS.md` documentant les corrections apportées à votre composant Angular `AddBookComponent`, en expliquant la nature des problèmes rencontrés, les solutions techniques mises en place, ainsi que les concepts Angular utilisés.
+
 
 ---
 
