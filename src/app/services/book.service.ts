@@ -10,12 +10,10 @@ import { BOOKS } from '../mocks/books.mock';
 export class BookService {
   constructor() {}
 
-  // Récupérer tous les livres
   getBooks(): Observable<Book[]> {
-    return of(BOOKS).pipe(delay(300)); // Simule un délai pour récupérer les livres
+    return of(BOOKS).pipe(delay(300)); 
   }
 
-  // Récupérer un livre par son ID
   getBookById(id: string): Observable<Book> {
     const book = BOOKS.find(b => b.id === id);
     if (!book) {
@@ -24,7 +22,6 @@ export class BookService {
     return of(book).pipe(delay(300));
   }
 
-  // Ajouter un nouveau livre
   addBook(book: Partial<Book>): Observable<Book> {
     const newBook: Book = {
       id: (BOOKS.length + 1).toString(),
@@ -39,7 +36,6 @@ export class BookService {
     return of(newBook).pipe(delay(300));
   }
 
-  // Mettre à jour les informations d'un livre
   updateBook(id: string, bookData: Partial<Book>): Observable<Book> {
     const index = BOOKS.findIndex(b => b.id === id);
     if (index === -1) {
@@ -50,7 +46,6 @@ export class BookService {
     return of(updatedBook).pipe(delay(300));
   }
 
-  // Supprimer un livre par son ID
   deleteBook(id: string): Observable<void> {
     const index = BOOKS.findIndex(b => b.id === id);
     if (index === -1) {
@@ -60,13 +55,11 @@ export class BookService {
     return of(undefined).pipe(delay(300));
   }
 
-  // Mettre à jour le statut 'favori' d'un livre
   toggleFavorite(id: string): Observable<Book> {
     const index = BOOKS.findIndex(b => b.id === id);
     if (index === -1) {
       return throwError(() => new Error('Livre non trouvé')).pipe(delay(300));
     }
-    // Inverser l'état du favori
     const updatedBook = { ...BOOKS[index], isFavorite: !BOOKS[index].isFavorite };
     BOOKS[index] = updatedBook;
     return of(updatedBook).pipe(delay(300));
